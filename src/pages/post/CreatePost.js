@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { createPost } from "../../services/postService";
 
-import { fetchAllCategories } from "../../services/categoryService"
+import { fetchAllCategories } from "../../services/categoryService";
 
 function CreatePost() {
-  const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -13,11 +11,13 @@ function CreatePost() {
   const [categoryId, setCategoryId] = useState("");
   const [categories, setCategories] = useState([]);
 
+  const [createInfo, setCreateInfo] = useState([]);
+
   useEffect(() => {
     const loadCategories = async () => {
       try {
         const data = await fetchAllCategories();
-        setCategories(data); // Adjust depending on the actual structure of the response
+        setCategories(data);
         if (data && data.length > 0) {
           setCategoryId(data[0].id.toString()); // Pre-select the first category by default
         }
@@ -39,10 +39,35 @@ function CreatePost() {
         categoryId: Number(categoryId),
       };
       await createPost(newPost);
-      alert("Post created successfully");
-      navigate("/"); // Go back to home page
+      setCreateInfo([1, "Post created successfully"]);
     } catch (error) {
       console.error("Error creating post: ", error);
+      if (error.response) {
+        // Check if the error is a 401 and adjust the message accordingly
+        if (error.response.status === 401) {
+          if (
+            error.response.data &&
+            error.response.data.message === "Access Denied"
+          ) {
+            setCreateInfo([
+              0,
+              "You do not have permission to perform this action.",
+            ]);
+          } else {
+            setCreateInfo([0, "Please sign in to post!"]);
+          }
+        } else {
+          setCreateInfo([
+            0,
+            "An error occurred while trying to post. Please try again.",
+          ]);
+        }
+      } else {
+        setCreateInfo([
+          0,
+          "Network error, please check your internet connection.",
+        ]);
+      }
     }
   };
 
@@ -97,6 +122,12 @@ function CreatePost() {
         </div>
         <button type="submit">Create Post</button>
       </form>
+      {createInfo &&
+        (createInfo[0] === 1 ? (
+          <p style={{ color: 'green' }}>{createInfo[1]}</p>
+        ) : (
+          <p style={{ color: 'red' }}>{createInfo[1]}</p>
+        ))}
     </div>
   );
 }
