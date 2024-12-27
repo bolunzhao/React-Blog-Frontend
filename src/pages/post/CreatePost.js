@@ -4,14 +4,13 @@ import { createPost } from "../../services/postService";
 import { fetchAllCategories } from "../../services/categoryService";
 
 function CreatePost() {
-
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [categories, setCategories] = useState([]);
 
-  const [createInfo, setCreateInfo] = useState([]);
+  const [createInfo, setCreateInfo] = useState({ status: null, message: "" });
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -39,34 +38,29 @@ function CreatePost() {
         categoryId: Number(categoryId),
       };
       await createPost(newPost);
-      setCreateInfo([1, "Post created successfully"]);
+      setCreateInfo({ status: true, message: "Post created successfully" });
     } catch (error) {
       console.error("Error creating post: ", error);
       if (error.response) {
-        // Check if the error is a 401 and adjust the message accordingly
         if (error.response.status === 401) {
-          if (
+          const message =
             error.response.data &&
             error.response.data.message === "Access Denied"
-          ) {
-            setCreateInfo([
-              0,
-              "You do not have permission to perform this action.",
-            ]);
-          } else {
-            setCreateInfo([0, "Please sign in to post!"]);
-          }
+              ? "You do not have permission to perform this action."
+              : "Please sign in to post!";
+          setCreateInfo({ status: false, message: message });
         } else {
-          setCreateInfo([
-            0,
-            "An error occurred while trying to post. Please try again.",
-          ]);
+          setCreateInfo({
+            status: false,
+            message:
+              "An error occurred while trying to post. Please try again.",
+          });
         }
       } else {
-        setCreateInfo([
-          0,
-          "Network error, please check your internet connection.",
-        ]);
+        setCreateInfo({
+          status: false,
+          message: "Network error, please check your internet connection.",
+        });
       }
     }
   };
@@ -122,12 +116,11 @@ function CreatePost() {
         </div>
         <button type="submit">Create Post</button>
       </form>
-      {createInfo &&
-        (createInfo[0] === 1 ? (
-          <p style={{ color: 'green' }}>{createInfo[1]}</p>
-        ) : (
-          <p style={{ color: 'red' }}>{createInfo[1]}</p>
-        ))}
+      {createInfo.message && (
+        <p style={{ color: createInfo.status ? "green" : "red" }}>
+          {createInfo.message}
+        </p>
+      )}
     </div>
   );
 }
