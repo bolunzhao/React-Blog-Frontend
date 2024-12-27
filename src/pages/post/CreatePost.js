@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPost } from "../../services/postService";
 
-import { fetchAllCategories } from "../../services/categoryService";
+import { fetchAllCategories } from "../../services/categoryService"
 
 function CreatePost() {
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ function CreatePost() {
       alert("Post created successfully");
       navigate("/"); // Go back to home page
     } catch (error) {
-      console.error("Error creating post:", error);
+      console.error("Error creating post: ", error);
     }
   };
 

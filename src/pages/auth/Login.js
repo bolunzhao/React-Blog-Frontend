@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../services/authService';
 
+import { useUser } from './UserContext';
+
 function Login() {
   const navigate = useNavigate();
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
+  const { setUser } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,10 +20,7 @@ function Login() {
 
       // Store token in localStorage (basic approach)
       localStorage.setItem('token', data.accessToken);
-
-      // Optionally store tokenType
-      // localStorage.setItem('tokenType', data.tokenType);
-
+      setUser({ username: usernameOrEmail });
       // Redirect or do any post-login steps
       navigate('/');
     } catch (err) {
