@@ -3,6 +3,8 @@ import { createPost } from "../../services/postService";
 
 import { fetchAllCategories } from "../../services/categoryService";
 
+import { Alert } from "@mui/material";
+
 function CreatePost() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -117,9 +119,9 @@ function CreatePost() {
         <button type="submit">Create Post</button>
       </form>
       {createInfo.message && (
-        <p style={{ color: createInfo.status ? "green" : "red" }}>
+        <Alert severity={createInfo.status ? "success" : "error"}>
           {createInfo.message}
-        </p>
+        </Alert>
       )}
     </div>
   );

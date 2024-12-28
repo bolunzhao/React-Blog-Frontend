@@ -44,7 +44,7 @@ function Navbar() {
       {/* Second row for user information */}
       {user && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span>Welcome, {user.username}!</span>
+          <span>Hi, {user.username}!</span>
         </div>
       )}
     </div>
@@ -58,7 +58,7 @@ function App() {
         <Navbar />
         <Routes>
           {/* Homepage */}
-          <Route path="/" element={<h1>Home Page</h1>} />
+          <Route path="/" element={<h1 style={{ color: 'green', margin: '20px'}}>Welcome to Allen's Blog!</h1>} />
 
           {/* Posts-related routes */}
           <Route path="/posts" element={<PostList />}/>

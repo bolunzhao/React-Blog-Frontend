@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createCategory } from "../../services/categoryService";
 
-function CreateCategory() {
-  const navigate = useNavigate();
+import { Alert } from "@mui/material";
 
+function CreateCategory() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -73,9 +73,9 @@ function CreateCategory() {
         <button type="submit">Create category</button>
       </form>
       {createInfo.message && (
-        <p style={{ color: createInfo.status ? "green" : "red" }}>
+        <Alert severity={createInfo.status ? "success" : "error"}>
           {createInfo.message}
-        </p>
+        </Alert>
       )}
     </div>
   );
