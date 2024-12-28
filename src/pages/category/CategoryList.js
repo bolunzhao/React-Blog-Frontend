@@ -6,6 +6,7 @@ import {
 } from "../../services/categoryService";
 
 function CategoryList() {
+
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -29,6 +30,16 @@ function CategoryList() {
         loadCategories();
       } catch (error) {
         console.error(`Error deleting category ${id}`, error);
+        if (error.response){
+          if(error.response.status === 401){
+            const message =
+            error.response.data &&
+            error.response.data.message === "Access Denied"
+              ? "You do not have permission to perform this action."
+              : "Please sign in to delete!";
+            alert(message);
+          }
+        }
       }
     }
   };
