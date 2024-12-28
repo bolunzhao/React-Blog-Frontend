@@ -19,42 +19,48 @@ import Navbar from "./components/Navbar";
 import UserInfoBar from "./components/UserInfoBar";
 
 function App() {
-
   return (
     <UserProvider>
       <Router>
-        <UserInfoBar />
-        <Navbar />
-        <Routes>
-          {/* Homepage */}
-          <Route
-            path="/"
-            element={
-              <h1 style={{ color: "green", margin: "20px" }}>
-                Welcome to Allen's Blog!
-              </h1>
-            }
-          />
+        {/* Container that takes full viewport height in total */}
+        <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+          {/* Optional top bar */}
+          <UserInfoBar />
 
-          {/* Posts-related routes */}
-          <Route path="/posts" element={<PostList />} />
-          <Route path="/posts/new" element={<CreatePost />} />
-          <Route path="/posts/:id/edit" element={<EditPost />} />
-          <Route path="/posts/:id" element={<PostDetails />} />
+          {/* Main content area grows to fill space. 
+              We also add a bottom margin to avoid overlap with Navbar */}
+          <div
+            style={{
+              // offset from the top bar
+              marginTop: "60px",    // must match the height of UserInfoBar
+              flex: 1,
+              padding: "10px",
+              marginBottom: "60px", // space for the fixed bottom Navbar
+            }}
+          >
+            <Routes>
+              <Route
+                path="/"
+                element={<h1 style={{ color: "green" }}>Welcome to Allen's Blog!</h1>}
+              />
+              <Route path="/posts" element={<PostList />} />
+              <Route path="/posts/new" element={<CreatePost />} />
+              <Route path="/posts/:id/edit" element={<EditPost />} />
+              <Route path="/posts/:id" element={<PostDetails />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/categories" element={<CategoryList />} />
+              <Route path="/categories/new" element={<CreateCategory />} />
+            </Routes>
+          </div>
 
-          {/* Auth-related routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-
-          {/* Categories-related routes */}
-          <Route path="/categories" element={<CategoryList />} />
-          <Route path="/categories/new" element={<CreateCategory />} />
-
-          {/* You can add a catch-all or 404 page if you want */}
-        </Routes>
+          {/* Fixed (or sticky) bottom navbar */}
+          <div style={{ flexShrink: 0 }}>
+            <Navbar />
+          </div>
+        </div>
       </Router>
     </UserProvider>
   );
 }
-
 export default App;

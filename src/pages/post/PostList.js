@@ -2,6 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchAllPosts, deletePost } from "../../services/postService";
 
+import {
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+  Container,
+  IconButton,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+
 function PostList() {
   const [posts, setPosts] = useState([]);
 
@@ -27,30 +39,59 @@ function PostList() {
         loadPosts(); // Reload the list
       } catch (error) {
         console.error("Error deleting post:", error);
+        if(error.response){
+          if (error.response.status === 401) {
+            const message =
+              error.response.data &&
+              error.response.data.message === "Access Denied"
+                ? "You do not have permission to perform this action."
+                : "Please sign in to delete post!";
+            alert(message);
+          }
+        }
       }
     }
   };
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h2>All Blog Posts</h2>
-      {posts.map((p) => (
-        <div
-          key={p.id}
-          style={{
-            border: "1px solid #ccc",
-            marginBottom: "1rem",
-            padding: "1rem",
-          }}
-        >
-          <h4>{p.title}</h4>
-          <p>{p.description}</p>
-          <Link to={`/posts/${p.id}`}>View Details</Link> |{" "}
-          <Link to={`/posts/${p.id}/edit`}>Edit</Link> |{" "}
-          <button onClick={() => handleDelete(p.id)}>Delete</button>
-        </div>
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        All Blog Posts
+      </Typography>
+      {posts.map((post) => (
+        <Card key={post.id} sx={{ marginBottom: 2 }}>
+          <CardContent>
+            <Typography variant="h5" component="div">
+              {post.title}
+            </Typography>
+            <Typography color="text.secondary">{post.description}</Typography>
+          </CardContent>
+          <CardActions>
+            <IconButton
+              component={Link}
+              to={`/posts/${post.id}`}
+              aria-label="view"
+            >
+              <VisibilityIcon />
+            </IconButton>
+            <IconButton
+              component={Link}
+              to={`/posts/${post.id}/edit`}
+              aria-label="edit"
+            >
+              <EditIcon />
+            </IconButton>
+            <IconButton
+              onClick={() => handleDelete(post.id)}
+              color="error"
+              aria-label="delete"
+            >
+              <DeleteIcon />
+            </IconButton>
+          </CardActions>
+        </Card>
       ))}
-    </div>
+    </Container>
   );
 }
 

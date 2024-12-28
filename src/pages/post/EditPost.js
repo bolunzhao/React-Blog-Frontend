@@ -4,6 +4,19 @@ import { fetchPostById, updatePost } from "../../services/postService";
 
 import { fetchAllCategories } from "../../services/categoryService";
 
+import {
+  TextField,
+  Button,
+  Typography,
+  Container,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
+  Box,
+  Alert,
+} from "@mui/material";
+
 function EditPost() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -13,6 +26,8 @@ function EditPost() {
   const [content, setContent] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [categories, setCategories] = useState([]);
+
+  const [createInfo, setCreateInfo] = useState({ status: null, message: "" });
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -48,72 +63,112 @@ function EditPost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const updatedPost = {
+      // Construct the PostDto
+      const newPost = {
         title,
         description,
         content,
         categoryId: Number(categoryId),
       };
-      await updatePost(id, updatedPost);
-      alert("Post updated successfully");
-      navigate("/");
+      await updatePost(categoryId, newPost);
+      setCreateInfo({ status: true, message: "Post updated successfully" });
     } catch (error) {
-      console.error("Error updating post:", error);
+      console.error("Error creating post: ", error);
+      if (error.response) {
+        if (error.response.status === 401) {
+          const message =
+            error.response.data &&
+            error.response.data.message === "Access Denied"
+              ? "You do not have permission to perform this action."
+              : "Please sign in to update post!";
+          setCreateInfo({ status: false, message: message });
+        } else {
+          setCreateInfo({
+            status: false,
+            message:
+              "An error occurred while trying to update post. Please try again.",
+          });
+        }
+      } else {
+        setCreateInfo({
+          status: false,
+          message: "Network error, please check your internet connection.",
+        });
+      }
     }
   };
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h2>Edit Post</h2>
+    <Container maxWidth="md">
+      <Typography variant="h4" gutterBottom>
+        Edit Post
+      </Typography>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title</label>
-          <br />
-          <input
-            type="text"
+        <Box mb={2}>
+          <TextField
+            fullWidth
+            label="Title"
+            variant="outlined"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            minLength={2}
+            inputProps={{ minLength: 2 }}
           />
-        </div>
-        <div>
-          <label>Description</label>
-          <br />
-          <textarea
+        </Box>
+        <Box mb={2}>
+          <TextField
+            fullWidth
+            label="Description"
+            variant="outlined"
+            multiline
+            rows={3}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
-            minLength={10}
+            inputProps={{ minLength: 10 }}
           />
-        </div>
-        <div>
-          <label>Content</label>
-          <br />
-          <textarea
+        </Box>
+        <Box mb={2}>
+          <TextField
+            fullWidth
+            label="Content"
+            variant="outlined"
+            multiline
+            rows={4}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
           />
-        </div>
-        <div>
-          <label>Category</label>
-          <br />
-          <select
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-            required
-          >
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button type="submit">Update Post</button>
+        </Box>
+        <Box mb={2}>
+          <FormControl fullWidth>
+            <InputLabel>Category</InputLabel>
+            <Select
+              value={categoryId}
+              label="Category"
+              onChange={(e) => setCategoryId(e.target.value)}
+              required
+            >
+              {categories.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  {category.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+        <Button type="submit" variant="contained" color="primary">
+          Update Post
+        </Button>
       </form>
-    </div>
+      {createInfo.message && (
+        <Box mt={2}>
+          <Alert severity={createInfo.status ? "success" : "error"}>
+            {createInfo.message}
+          </Alert>
+        </Box>
+      )}
+    </Container>
   );
 }
 

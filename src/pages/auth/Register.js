@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../../services/authService';
 
+import { TextField, Button, Typography, Container, Box, Alert } from '@mui/material';
+
 function Register() {
   const navigate = useNavigate();
-
-  // Fields according to RegisterDto: name, username, email, password
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -15,14 +15,11 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const response = await registerUser(name, username, email, password);
-      // response is a string from the backend (e.g. "User registered successfully")
       setSuccessMsg(response);
       setError('');
-      // Optionally redirect to login after a short delay
-      // setTimeout(() => navigate('/login'), 2000);
+      setTimeout(() => navigate('/login'), 2000); // Redirect to login after success
     } catch (err) {
       console.error('Registration error', err);
       setSuccessMsg('');
@@ -31,52 +28,70 @@ function Register() {
   };
 
   return (
-    <div style={{ padding: '1rem' }}>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit} style={{ maxWidth: '400px' }}>
-        <div>
-          <label>Name</label><br />
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div style={{ marginTop: '0.5rem' }}>
-          <label>Username</label><br />
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div style={{ marginTop: '0.5rem' }}>
-          <label>Email</label><br />
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div style={{ marginTop: '0.5rem' }}>
-          <label>Password</label><br />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button style={{ marginTop: '1rem' }} type="submit">
-          Sign Up
-        </button>
-      </form>
-      {successMsg && <p style={{ color: 'green' }}>{successMsg}</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-    </div>
+    <Container maxWidth="sm">
+      <Box my={4}>
+        <Typography variant="h4" gutterBottom>
+          Register
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Box mb={2}>
+            <TextField
+              fullWidth
+              label="Name"
+              variant="outlined"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </Box>
+          <Box mb={2}>
+            <TextField
+              fullWidth
+              label="Username"
+              variant="outlined"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </Box>
+          <Box mb={2}>
+            <TextField
+              fullWidth
+              label="Email"
+              type="email"
+              variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </Box>
+          <Box mb={2}>
+            <TextField
+              fullWidth
+              label="Password"
+              type="password"
+              variant="outlined"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </Box>
+          <Button type="submit" variant="contained" color="primary">
+            Sign Up
+          </Button>
+        </form>
+        {successMsg && (
+          <Box mt={2}>
+            <Alert severity="success">{successMsg}</Alert>
+          </Box>
+        )}
+        {error && (
+          <Box mt={2}>
+            <Alert severity="error">{error}</Alert>
+          </Box>
+        )}
+      </Box>
+    </Container>
   );
 }
 

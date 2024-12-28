@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchPostById } from '../../services/postService';
-import { fetchCategoryById } from '../../services/categoryService';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { fetchPostById } from "../../services/postService";
+import { fetchCategoryById } from "../../services/categoryService";
+
+import { Typography, Container, CircularProgress, Paper } from "@mui/material";
 
 function PostDetails() {
   const { id } = useParams();
@@ -20,7 +22,7 @@ function PostDetails() {
         loadCategory(data.categoryId);
       }
     } catch (error) {
-      console.error('Error fetching post details:', error);
+      console.error("Error fetching post details:", error);
     }
   };
 
@@ -29,21 +31,39 @@ function PostDetails() {
       const catData = await fetchCategoryById(categoryId); // Fetch the category details
       setCategory(catData);
     } catch (error) {
-      console.error('Error fetching category:', error);
+      console.error("Error fetching category:", error);
     }
   };
 
-  if (!post) return <p>Loading...</p>;
+  if (!post)
+    return (
+      <Container>
+        <CircularProgress />
+      </Container>
+    );
 
   return (
-    <div style={{ padding: '1rem' }}>
-      <h2>Post Details</h2>
-      <h3>{post.title}</h3>
-      <p><strong>Description: </strong>{post.description}</p>
-      <p><strong>Content: </strong>{post.content}</p>
-      <p><strong>Category: </strong>{category ? category.name : 'Loading category...'}</p>
-      {/* If you want to display comments or other fields, access post.comments, etc. */}
-    </div>
+    <Container maxWidth="md">
+      <Paper elevation={3} style={{ padding: "20px", marginTop: "20px" }}>
+        <Typography variant="h4" gutterBottom>
+          Post Details
+        </Typography>
+        <Typography variant="h5" gutterBottom>
+          {post.title}
+        </Typography>
+        <Typography paragraph>
+          <strong>Description:</strong> {post.description}
+        </Typography>
+        <Typography paragraph>
+          <strong>Content:</strong> {post.content}
+        </Typography>
+        <Typography paragraph>
+          <strong>Category:</strong>{" "}
+          {category ? category.name : <CircularProgress size={20} />}
+        </Typography>
+        {/* If you want to display comments or other fields, access post.comments, etc. */}
+      </Paper>
+    </Container>
   );
 }
 

@@ -1,16 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import CategoryIcon from "@mui/icons-material/Category";
 import PostAddIcon from "@mui/icons-material/PostAdd";
-import LoginIcon from "@mui/icons-material/Login";
-import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-import { useUser } from "../pages/auth/UserContext";
-import Logout from "../pages/auth/Logout";
 
 function Navbar() {
-  const { user } = useUser();
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
 

@@ -3,7 +3,18 @@ import { createPost } from "../../services/postService";
 
 import { fetchAllCategories } from "../../services/categoryService";
 
-import { Alert } from "@mui/material";
+import {
+  Alert,
+  TextField,
+  Button,
+  Typography,
+  Container,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Box
+} from '@mui/material';
 
 function CreatePost() {
   const [title, setTitle] = useState("");
@@ -68,62 +79,76 @@ function CreatePost() {
   };
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h2>Create a New Post</h2>
+    <Container maxWidth="md">
+      <Typography variant="h4" gutterBottom>
+        Create a New Post
+      </Typography>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title (min 2 chars)</label>
-          <br />
-          <input
-            type="text"
+        <Box mb={2}>
+          <TextField
+            fullWidth
+            label="Title"
+            variant="outlined"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            minLength={2}
+            inputProps={{ minLength: 2 }}
           />
-        </div>
-        <div>
-          <label>Description (min 10 chars)</label>
-          <br />
-          <textarea
+        </Box>
+        <Box mb={2}>
+          <TextField
+            fullWidth
+            label="Description"
+            variant="outlined"
+            multiline
+            rows={3}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
-            minLength={10}
+            inputProps={{ minLength: 10 }}
           />
-        </div>
-        <div>
-          <label>Content (not empty)</label>
-          <br />
-          <textarea
+        </Box>
+        <Box mb={2}>
+          <TextField
+            fullWidth
+            label="Content"
+            variant="outlined"
+            multiline
+            rows={4}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
           />
-        </div>
-        <div>
-          <label>Category</label>
-          <br />
-          <select
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-            required
-          >
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button type="submit">Create Post</button>
+        </Box>
+        <Box mb={2}>
+          <FormControl fullWidth>
+            <InputLabel>Category</InputLabel>
+            <Select
+              value={categoryId}
+              label="Category"
+              onChange={(e) => setCategoryId(e.target.value)}
+              required
+            >
+              {categories.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  {category.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+        <Button type="submit" variant="contained" color="primary">
+          Create Post
+        </Button>
       </form>
       {createInfo.message && (
-        <Alert severity={createInfo.status ? "success" : "error"}>
-          {createInfo.message}
-        </Alert>
+        <Box mt={2}>
+          <Alert severity={createInfo.status ? 'success' : 'error'}>
+            {createInfo.message}
+          </Alert>
+        </Box>
       )}
-    </div>
+    </Container>
   );
 }
 
