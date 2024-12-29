@@ -6,9 +6,18 @@ import LoginIcon from "@mui/icons-material/Login";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import Logout from "../pages/auth/Logout";
 
+import { jwtDecode } from "jwt-decode";
+
 function UserInfoBar() {
   const { user } = useUser();
   const navigate = useNavigate();
+
+  let isAdmin = false;
+  const token = localStorage.getItem("token");
+  const jwtToken = token ? jwtDecode(token) : null;
+  if (jwtToken) {
+    isAdmin = jwtToken && jwtToken.roles && jwtToken.roles === "ROLE_ADMIN";
+  }
 
   return (
     <div
@@ -27,7 +36,11 @@ function UserInfoBar() {
       }}
     >
       {/* Text section */}
-      <span>{user ? `Hi, ${user.username}` : "Login to use Blog"}</span>
+      <span>
+        {user
+          ? `Hi, ${user.username}${isAdmin ? " (Admin)" : " (Regular User)"}`
+          : "Login to use Blog"}
+      </span>
 
       {/* Button section */}
       {user ? (
