@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -8,10 +8,12 @@ import {
   Container,
   Box,
   IconButton,
-} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { fetchAllCategories, deleteCategory } from '../../services/categoryService';
-
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import {
+  fetchAllCategories,
+  deleteCategory,
+} from "../../services/categoryService";
 
 function CategoryList() {
   const [categories, setCategories] = useState([]);
@@ -40,7 +42,8 @@ function CategoryList() {
         if (error.response) {
           if (error.response.status === 401) {
             const message =
-              error.response.data && error.response.data.message === "Access Denied"
+              error.response.data &&
+              error.response.data.message === "Access Denied"
                 ? "You do not have permission to perform this action."
                 : "Please sign in to delete!";
             alert(message);
@@ -55,23 +58,25 @@ function CategoryList() {
       <Typography variant="h4" gutterBottom>
         All Blog Categories
       </Typography>
-      {categories.map((c) => (
-        <Card key={c.id} sx={{ marginBottom: 2 }}>
-          <CardContent>
-            <Typography variant="h5" component="div">
-              {c.name}
-            </Typography>
-            <Typography color="text.secondary">
-              {c.description}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <IconButton onClick={() => handleDelete(c.id)} color="error">
-              <DeleteIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
-      ))}
+      {categories ? (
+        categories.map((c) => (
+          <Card key={c.id} sx={{ marginBottom: 2 }}>
+            <CardContent>
+              <Typography variant="h5" component="div">
+                {c.name}
+              </Typography>
+              <Typography color="text.secondary">{c.description}</Typography>
+            </CardContent>
+            <CardActions>
+              <IconButton onClick={() => handleDelete(c.id)} color="error">
+                <DeleteIcon />
+              </IconButton>
+            </CardActions>
+          </Card>
+        ))
+      ) : (
+        <Box>No category yet, please create one</Box>
+      )}
     </Container>
   );
 }

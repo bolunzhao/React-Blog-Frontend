@@ -9,14 +9,16 @@ import Logout from "../pages/auth/Logout";
 import { jwtDecode } from "jwt-decode";
 
 function UserInfoBar() {
-  const { user } = useUser();
+  // const { user } = useUser();
   const navigate = useNavigate();
 
   let isAdmin = false;
+  let user = '';
   const token = localStorage.getItem("token");
   const jwtToken = token ? jwtDecode(token) : null;
   if (jwtToken) {
-    isAdmin = jwtToken && jwtToken.roles && jwtToken.roles === "ROLE_ADMIN";
+    isAdmin = jwtToken.roles && jwtToken.roles === "ROLE_ADMIN";
+    user = jwtToken.sub;
   }
 
   return (
@@ -38,7 +40,7 @@ function UserInfoBar() {
       {/* Text section */}
       <span>
         {user
-          ? `Hi, ${user.username}${isAdmin ? " (Admin)" : " (Regular User)"}`
+          ? `Hi, ${user}${isAdmin ? " (Admin)" : " (Regular User)"}`
           : "Login to use Blog"}
       </span>
 

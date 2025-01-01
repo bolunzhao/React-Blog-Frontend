@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { fetchAllPosts, deletePost } from "../../services/postService";
 
 import {
+  Box,
   Card,
   CardActions,
   CardContent,
@@ -13,6 +14,8 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+
+import { format, parseISO } from 'date-fns';
 
 function PostList() {
   const [posts, setPosts] = useState([]);
@@ -39,7 +42,7 @@ function PostList() {
         loadPosts(); // Reload the list
       } catch (error) {
         console.error("Error deleting post:", error);
-        if(error.response){
+        if (error.response) {
           if (error.response.status === 401) {
             const message =
               error.response.data &&
@@ -66,28 +69,44 @@ function PostList() {
             </Typography>
             <Typography color="text.secondary">{post.description}</Typography>
           </CardContent>
-          <CardActions>
-            <IconButton
-              component={Link}
-              to={`/posts/${post.id}`}
-              aria-label="view"
-            >
-              <VisibilityIcon />
-            </IconButton>
-            <IconButton
-              component={Link}
-              to={`/posts/${post.id}/edit`}
-              aria-label="edit"
-            >
-              <EditIcon />
-            </IconButton>
-            <IconButton
-              onClick={() => handleDelete(post.id)}
-              color="error"
-              aria-label="delete"
-            >
-              <DeleteIcon />
-            </IconButton>
+          <CardActions
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Box sx={{ display: "flex", gap: 2, paddingLeft: "10px" }}>
+              <Typography variant="body2" color="text.secondary">
+                Created: {format(parseISO(post.createdTime), 'yyyy-MM-dd HH:mm:ss')}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Updated: {format(parseISO(post.updatedTime), 'yyyy-MM-dd HH:mm:ss')}
+              </Typography>
+            </Box>
+            <Box>
+              <IconButton
+                component={Link}
+                to={`/posts/${post.id}`}
+                aria-label="view"
+              >
+                <VisibilityIcon />
+              </IconButton>
+              <IconButton
+                component={Link}
+                to={`/posts/${post.id}/edit`}
+                aria-label="edit"
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                onClick={() => handleDelete(post.id)}
+                color="error"
+                aria-label="delete"
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Box>
           </CardActions>
         </Card>
       ))}

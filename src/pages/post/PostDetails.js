@@ -5,6 +5,8 @@ import { fetchCategoryById } from "../../services/categoryService";
 
 import { Typography, Container, CircularProgress, Paper } from "@mui/material";
 
+import { format, parseISO } from "date-fns";
+
 function PostDetails() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
@@ -60,6 +62,10 @@ function PostDetails() {
         <Typography paragraph>
           <strong>Category:</strong>{" "}
           {category ? category.name : <CircularProgress size={20} />}
+        </Typography>
+        <Typography position={"bottom"}>
+          Created: {format(parseISO(post.createdTime), "yyyy-MM-dd HH:mm:ss")}{" "}
+          Updated: {format(parseISO(post.updatedTime), 'yyyy-MM-dd HH:mm:ss')}
         </Typography>
         {/* If you want to display comments or other fields, access post.comments, etc. */}
       </Paper>

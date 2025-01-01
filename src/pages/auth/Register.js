@@ -1,29 +1,40 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../../services/authService';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { registerUser } from "../../services/authService";
 
-import { TextField, Button, Typography, Container, Box, Alert } from '@mui/material';
+import {
+  TextField,
+  Button,
+  Typography,
+  Container,
+  Box,
+  Alert,
+} from "@mui/material";
 
 function Register() {
   const navigate = useNavigate();
-  const [name, setName] = useState('');
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [successMsg, setSuccessMsg] = useState('');
-  const [error, setError] = useState('');
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await registerUser(name, username, email, password);
       setSuccessMsg(response);
-      setError('');
-      setTimeout(() => navigate('/login'), 2000); // Redirect to login after success
+      setError("");
+      setTimeout(() => navigate("/login"), 3000); // Redirect to login after success
     } catch (err) {
-      console.error('Registration error', err);
-      setSuccessMsg('');
-      setError('Failed to register. Please try again.');
+      console.error("Registration error", err);
+      setSuccessMsg("");
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("Failed to register. Please try again.");
+      }
     }
   };
 
