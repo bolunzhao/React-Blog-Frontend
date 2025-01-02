@@ -6,9 +6,10 @@ This project is the React frontend for the Spring Boot Blog REST API. It provide
 
 ## Current Features
 
-- **Dynamic Posts Display:** Users can view a list of all blog posts and select individual posts to view detailed content.
+- **Dynamic Posts Display:** Users can view a list of all blog posts, select individual posts to view detailed content, and view comments of each post.
 - **Authentication System:** Supports user registration and login.
 - **Create, Update, and Delete Posts:** Users can manage their blog posts through the interface.
+- **Create, Update, and Delete Comments:** Users can manage their comments through the interface.
 
 ## Prerequisites
 
