@@ -13,8 +13,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Box
-} from '@mui/material';
+  Box,
+} from "@mui/material";
 
 function CreatePost() {
   const [title, setTitle] = useState("");
@@ -137,17 +137,17 @@ function CreatePost() {
             </Select>
           </FormControl>
         </Box>
+        {createInfo.message && (
+          <Box mb={2}>
+            <Alert severity={createInfo.status ? "success" : "error"}>
+              {createInfo.message}
+            </Alert>
+          </Box>
+        )}
         <Button type="submit" variant="contained" color="primary">
           Create Post
         </Button>
       </form>
-      {createInfo.message && (
-        <Box mt={2}>
-          <Alert severity={createInfo.status ? 'success' : 'error'}>
-            {createInfo.message}
-          </Alert>
-        </Box>
-      )}
     </Container>
   );
 }

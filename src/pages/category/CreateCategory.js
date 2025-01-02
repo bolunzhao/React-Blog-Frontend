@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { createCategory } from "../../services/categoryService";
-import { Alert, TextField, Button, Typography, Container, Box } from "@mui/material";
-
+import {
+  Alert,
+  TextField,
+  Button,
+  Typography,
+  Container,
+  Box,
+} from "@mui/material";
 
 function CreateCategory() {
   const [name, setName] = useState("");
@@ -70,17 +76,17 @@ function CreateCategory() {
             inputProps={{ minLength: 1 }}
           />
         </Box>
+        {createInfo.message && (
+          <Box mb={2}>
+            <Alert severity={createInfo.status ? "success" : "error"}>
+              {createInfo.message}
+            </Alert>
+          </Box>
+        )}
         <Button type="submit" variant="contained" color="primary">
           Create category
         </Button>
       </form>
-      {createInfo.message && (
-        <Box mt={2}>
-          <Alert severity={createInfo.status ? "success" : "error"}>
-            {createInfo.message}
-          </Alert>
-        </Box>
-      )}
     </Container>
   );
 }

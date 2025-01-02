@@ -77,10 +77,10 @@ function PostList() {
             }}
           >
             <Box sx={{ display: "flex", gap: 2, paddingLeft: "10px" }}>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="caption" color="text.secondary">
                 Created: {format(parseISO(post.createdTime), 'yyyy-MM-dd HH:mm:ss')}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="caption" color="text.secondary">
                 Updated: {format(parseISO(post.updatedTime), 'yyyy-MM-dd HH:mm:ss')}
               </Typography>
             </Box>

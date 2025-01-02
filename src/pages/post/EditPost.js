@@ -19,7 +19,6 @@ import {
 
 function EditPost() {
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -157,17 +156,17 @@ function EditPost() {
             </Select>
           </FormControl>
         </Box>
+        {createInfo.message && (
+          <Box mb={2}>
+            <Alert severity={createInfo.status ? "success" : "error"}>
+              {createInfo.message}
+            </Alert>
+          </Box>
+        )}
         <Button type="submit" variant="contained" color="primary">
           Update Post
         </Button>
       </form>
-      {createInfo.message && (
-        <Box mt={2}>
-          <Alert severity={createInfo.status ? "success" : "error"}>
-            {createInfo.message}
-          </Alert>
-        </Box>
-      )}
     </Container>
   );
 }
