@@ -38,7 +38,8 @@ This project is the React frontend for the Spring Boot Blog REST API. It provide
     npm start
     ```
    This will run the app in the development mode.
-   Open http://localhost:3000 to view it in the browser.
+   Open http://localhost:3000 to view it in the browser.  
+   **To interact with real data, the Spring Boot backend can be found here: https://github.com/bolunzhao/SpringBoot-Blog-REST-APIs**
 
 ## Environment Configuration  
 
