@@ -26,7 +26,7 @@ This project is the React frontend for the Spring Boot Blog REST API. It provide
 
 1. **Clone the frontend repository:**
    ```
-   git clone [your-frontend-repository-url]
+   git clone https://github.com/bolunzhao/React-Blog-Frontend.git
    cd blog-frontend
    ```
 2. **Install dependencies:**
